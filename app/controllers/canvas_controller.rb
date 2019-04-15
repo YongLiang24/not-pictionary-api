@@ -1,6 +1,5 @@
 class CanvasController < ApplicationController
   def create
-    # byebug
     ActionCable.server.broadcast 'canvas_drawings_channel', canvas_drawing_params
     head :ok
   end
