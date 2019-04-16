@@ -5,6 +5,7 @@ class CreateGames < ActiveRecord::Migration[5.2]
       t.references :drawer
       t.references :guesser
       t.jsonb :guesses
+      t.boolean :is_active
       t.timestamps
     end
   end
