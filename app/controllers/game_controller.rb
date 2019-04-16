@@ -6,6 +6,4 @@ class GameController < ApplicationController
   def update
     # append guesses
   end
-
-  
 end
