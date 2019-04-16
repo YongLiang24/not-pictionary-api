@@ -5,3 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+pizza = Player.find_or_create_by(name: 'Pizza')
+roni = Player.find_or_create_by(name: 'Roni')
+
+game_one = Game.create(drawer: pizza, guesser: roni, answer: 'Pie')

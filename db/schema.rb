@@ -10,9 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2019_04_16_170139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "games", force: :cascade do |t|
+    t.string "answer"
+    t.bigint "drawer_id"
+    t.bigint "guesser_id"
+    t.jsonb "guesses"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["drawer_id"], name: "index_games_on_drawer_id"
+    t.index ["guesser_id"], name: "index_games_on_guesser_id"
+  end
+
+  create_table "players", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end
