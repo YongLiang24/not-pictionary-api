@@ -1,6 +1,6 @@
 class CanvasDrawingsChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "canvas_drawings_channel"
+    stream_from "canvas_drawings_channel_#{params[:id]}"
   end
 
   def unsubscribed

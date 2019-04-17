@@ -19,7 +19,13 @@ obinna = Player.find_or_create_by(name: 'Obinna')
 carrie = Player.find_or_create_by(name: 'Carrie')
 king = Player.find_or_create_by(name: 'King')
 
-game_one = Game.create(drawer: pizza, guesser: roni, answer: 'Pie')
-game_two = Game.create(drawer: nneka, guesser: king, answer: 'Slice of Cake')
-game_three = Game.create(drawer: pizza, guesser: obinna, answer: 'Love')
-game_four = Game.create(drawer: roni, guesser: carrie, answer: 'Ace of Spades')
+game_one = Game.find_or_create_by(drawer: pizza, guesser: roni, answer: 'Pie')
+game_two = Game.find_or_create_by(drawer: nneka, guesser: king, answer: 'Slice of Cake')
+game_three = Game.find_or_create_by(drawer: pizza, guesser: obinna, answer: 'Love')
+game_four = Game.find_or_create_by(drawer: roni, guesser: carrie, answer: 'Ace of Spades')
+
+game_one.is_active = true
+game_one.save
+
+game_four.is_active = true
+game_four.save
