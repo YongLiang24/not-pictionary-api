@@ -6,17 +6,30 @@ class GameController < ApplicationController
   end
 
   def create
-    # create a new game
+    @drawing_player = Player.find(create_game_params[:playerId])
+    @game = Game.create(
+      drawer: @drawing_player,
+      name: create_game_params[:gameName],
+      is_active: true
+    )
+
+    render json: @game
   end
 
   def update
-    @player = Player.find_or_create_by(id: join_game_params[:playerId])
+    @player = Player.find(join_game_params[:playerId])
     @game = Game.find(join_game_params[:id])
     @game.guesser = @player
+    @game.save
+
     render json: @game
   end
 
   private
+
+  def create_game_params
+    params.permit(:playerId, :gameName)
+  end
 
   def join_game_params
     params.permit(:playerId, :id)
