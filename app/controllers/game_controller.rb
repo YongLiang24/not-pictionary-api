@@ -34,12 +34,16 @@ class GameController < ApplicationController
       @game.answer = game_form_params[:answer] if game_form_params[:answer]
       @game.save
 
-      ActionCable.server.broadcast "guesses_channel_#{game_form_params[:id]}", game_form_params
+      ActionCable.server.broadcast "game_form_channel_#{game_form_params[:id]}", game_form_params
       render json: @game
     elsif guess_list_params[:guessAction]
       # handling accept / reject guesses
       message = guess_list_params[:guessAction] == 'Reject' ? 'Wrong!' : 'Correct!'
-      @guess = {guessIdx: guess_list_params[:guessIdx], message: message, guessText: guess_list_params[:guessText]}
+      @guess = {
+        guessIdx: guess_list_params[:guessIdx],
+        message: message,
+        guessText: guess_list_params[:guessText]
+      }
 
       ActionCable.server.broadcast "guesses_channel_#{guess_list_params[:id]}", guess_list_params
       render json: @guess
@@ -55,7 +59,7 @@ class GameController < ApplicationController
   private
 
   def guess_list_params
-    params.permit(:guessIdx, :guessAction, :id, :guessText)
+    params.permit(:guessIdx, :guessAction, :id, :guessText, :type)
   end
 
   def create_game_params
@@ -67,6 +71,6 @@ class GameController < ApplicationController
   end
 
   def game_form_params
-    params.permit(:guess, :answer, :playerId, :id)
+    params.permit(:guess, :answer, :playerId, :id, :type)
   end
 end
