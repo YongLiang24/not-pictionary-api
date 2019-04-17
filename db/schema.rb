@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2019_04_16_170139) do
     t.bigint "drawer_id"
     t.bigint "guesser_id"
     t.string "answer"
-    t.jsonb "guesses"
+    t.string "guesses", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["drawer_id"], name: "index_games_on_drawer_id"

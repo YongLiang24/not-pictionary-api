@@ -6,7 +6,7 @@ class CreateGames < ActiveRecord::Migration[5.2]
       t.references :drawer
       t.references :guesser
       t.string :answer
-      t.jsonb :guesses
+      t.string :guesses, array: true
       t.timestamps
     end
   end
