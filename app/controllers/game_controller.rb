@@ -23,28 +23,40 @@ class GameController < ApplicationController
     @guesses= @game.guesses
 
     render json: @guesses
-
   end
 
   def update
-
     @game = Game.find(join_game_params[:id])
-
-    if  game_form_params[:guess] || game_form_params[:answer]
+    # byebug
+    if game_form_params[:guess] || game_form_params[:answer]
+      # handling both new guesses and new answers
       @game.guesses << game_form_params[:guess] if game_form_params[:guess]
       @game.answer = game_form_params[:answer] if game_form_params[:answer]
       @game.save
+
+      ActionCable.server.broadcast "guesses_channel_#{game_form_params[:id]}", game_form_params
+      render json: @game
+    elsif guess_list_params[:guessAction]
+      # handling accept / reject guesses
+      message = guess_list_params[:guessAction] == 'Reject' ? 'Wrong!' : 'Correct!'
+      @guess = {guessIdx: guess_list_params[:guessIdx], message: message, guessText: guess_list_params[:guessText]}
+
+      ActionCable.server.broadcast "guesses_channel_#{guess_list_params[:id]}", guess_list_params
+      render json: @guess
     else
+      # handling joining game as guesser
       @player = Player.find(join_game_params[:playerId])
       @game.guesser = @player
       @game.save
+      render json: @game
     end
-
-    # byebug
-    render json: @game
   end
 
   private
+
+  def guess_list_params
+    params.permit(:guessIdx, :guessAction, :id, :guessText)
+  end
 
   def create_game_params
     params.permit(:playerId, :gameName)
@@ -55,6 +67,6 @@ class GameController < ApplicationController
   end
 
   def game_form_params
-    params.permit(:guess, :answer, :playerId)
+    params.permit(:guess, :answer, :playerId, :id)
   end
 end
