@@ -27,7 +27,7 @@ class GameController < ApplicationController
 
   def update
     @game = Game.find(join_game_params[:id])
-    # byebug
+
     if game_form_params[:guess] || game_form_params[:answer]
       # handling both new guesses and new answers
       @game.guesses << game_form_params[:guess] if game_form_params[:guess]
@@ -47,6 +47,12 @@ class GameController < ApplicationController
 
       ActionCable.server.broadcast "guesses_channel_#{guess_list_params[:id]}", @guess
       render json: @guess
+    elsif end_game_params[:endCondition]
+      # saving end game to db
+      attrs = end_game_params.keep_if { |k,v| k != 'endCondition'}
+      @game.update(attrs)
+
+      head :ok
     else
       # handling joining game as guesser
       @player = Player.find(join_game_params[:playerId])
@@ -57,6 +63,10 @@ class GameController < ApplicationController
   end
 
   private
+
+  def end_game_params
+    params.permit(:endCondition, :is_won, :id, :is_active)
+  end
 
   def guess_list_params
     params.permit(:guessIdx, :guessAction, :id, :guessText, :type)
