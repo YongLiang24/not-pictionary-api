@@ -45,7 +45,7 @@ class GameController < ApplicationController
         guessText: guess_list_params[:guessText]
       }
 
-      ActionCable.server.broadcast "guesses_channel_#{guess_list_params[:id]}", guess_list_params
+      ActionCable.server.broadcast "guesses_channel_#{guess_list_params[:id]}", @guess
       render json: @guess
     else
       # handling joining game as guesser
