@@ -18,7 +18,6 @@ ActiveRecord::Schema.define(version: 2019_04_16_170139) do
   create_table "games", force: :cascade do |t|
     t.string "name"
     t.boolean "is_active"
-    t.boolean "is_won"
     t.bigint "drawer_id"
     t.bigint "guesser_id"
     t.string "answer"
