@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :canvas, only: [:create]
   resources :game
   resources :player
+  resources :timer
   # mount the ActionCable server with a '/cable' endpoint-- will be used to instantiate websockets connection with the server
   mount ActionCable.server => '/cable'
 end

@@ -35,9 +35,10 @@ class GameController < ApplicationController
       @game.save
 
       ActionCable.server.broadcast "game_form_channel_#{game_form_params[:id]}", game_form_params
+      head :ok
       render json: @game
     elsif guess_list_params[:guessAction]
-      # handling accept / reject guesses
+      handling accept / reject guesses
       message = guess_list_params[:guessAction] == 'Reject' ? 'Wrong!' : 'Correct!'
       @guess = {
         guessIdx: guess_list_params[:guessIdx],
@@ -46,6 +47,7 @@ class GameController < ApplicationController
       }
 
       ActionCable.server.broadcast "guesses_channel_#{guess_list_params[:id]}", guess_list_params
+      head :ok
       render json: @guess
     else
       # handling joining game as guesser
