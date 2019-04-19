@@ -1,11 +1,27 @@
-development:
-  adapter: async
-  # url: redis://localhost:3000
+# development:
+#   adapter: async
+#   # url: redis://localhost:3000
+#
+# test:
+#   adapter: async
+#
+# production:
+#   adapter: redis
+#   url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+#   channel_prefix: not-pictionary-api_production
 
-test:
-  adapter: async
 
-production:
-  adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
-  channel_prefix: not-pictionary-api_production
+development: &development
+  :url: redis://localhost:6379
+  :host: localhost
+  :port: 6379
+  :timeout: 1
+  :inline: true
+test: *development
+production: &production
+  :url: redis://h:p4365a57066866a77ed2c5468bb1cde6439669495dd83451d71628cb57501497f@ec2-3-212-99-166.compute-1.amazonaws.com:24079
+  :host: ec2-3-212-99-166.compute-1.amazonaws.com
+  :port: 24079
+  :password: p4365a57066866a77ed2c5468bb1cde6439669495dd83451d71628cb57501497f
+  :inline: true
+  :timeout: 1

@@ -80,6 +80,9 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
+#action cable stuff
+  config.middleware.use ChatActionCable
+  config.web_socket_server_url = "wss://pictionaries.herokuapp.com/"
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
