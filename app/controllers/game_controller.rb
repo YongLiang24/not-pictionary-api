@@ -21,21 +21,42 @@ class GameController < ApplicationController
   def show
     @game=Game.find(params[:id])
     @guesses= @game.guesses
-
-    render json: @guesses
+    @guesses = @game.rejectList
+    render json: @game
   end
 
   def update
     @game = Game.find(join_game_params[:id])
+    @guessGame = Game.find(game_form_params[:id])
+
+    if game_form_params[:isClear]
+      @guessGame.answer =''
+      @guessGame.guesses.clear
+      @guessGame.rejectList.clear
+      @guessGame.is_won = false
+      @guessGame.save
+      render json: @guessGame
+    end
+
+    if guess_list_params[:isReject]
+      @guessGame.is_won = true
+      @guessGame.save
+      render json: @guessGame
+    end
 
     if game_form_params[:guess] || game_form_params[:answer]
       # handling both new guesses and new answers
-      @game.guesses << game_form_params[:guess] if game_form_params[:guess]
-      @game.answer = game_form_params[:answer] if game_form_params[:answer]
-      @game.save
+      @guessGame.guesses << game_form_params[:guess] if game_form_params[:guess]
+      @guessGame.answer = game_form_params[:answer] if game_form_params[:answer]
+      # @guessGame.rejectList << game_form_params[:guessText] if game_form_params[:guessText]
+      @guessGame.save
+      render json: @guessGame
 
-      ActionCable.server.broadcast "game_form_channel_#{game_form_params[:id]}", game_form_params
-      render json: @game
+    elsif guess_list_params[:guessText]
+        @guessGame.rejectList << guess_list_params[:guessText] if guess_list_params[:guessText]
+        @guessGame.save
+        render json: @guessGame
+
     elsif guess_list_params[:guessAction]
       # handling accept / reject guesses
       message = guess_list_params[:guessAction] == 'Reject' ? 'Wrong!' : 'Correct!'
@@ -45,7 +66,7 @@ class GameController < ApplicationController
         guessText: guess_list_params[:guessText]
       }
 
-      ActionCable.server.broadcast "guesses_channel_#{guess_list_params[:id]}", @guess
+      # ActionCable.server.broadcast "guesses_channel_#{guess_list_params[:id]}", @guess
       render json: @guess
     elsif end_game_params[:endCondition]
       # saving end game to db
@@ -69,7 +90,7 @@ class GameController < ApplicationController
   end
 
   def guess_list_params
-    params.permit(:guessIdx, :guessAction, :id, :guessText, :type)
+    params.permit(:guessIdx, :guessAction, :id, :guessText, :type, :updateReject, :isReject)
   end
 
   def create_game_params
@@ -81,6 +102,6 @@ class GameController < ApplicationController
   end
 
   def game_form_params
-    params.permit(:guess, :answer, :playerId, :id, :type)
+    params.permit(:guess, :answer, :playerId, :id, :type, :rejectList, :isClear, :guessInput, :isReject)
   end
 end

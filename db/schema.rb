@@ -10,18 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_16_170139) do
+ActiveRecord::Schema.define(version: 2019_04_19_205450) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "canvas", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "currentGameId"
+    t.integer "prevX"
+    t.integer "currX"
+    t.integer "prevY"
+    t.integer "currY"
+    t.integer "prevXArray", default: [], array: true
+    t.integer "prevYArray", default: [], array: true
+    t.integer "currXArray", default: [], array: true
+    t.integer "currYArray", default: [], array: true
+  end
+
   create_table "games", force: :cascade do |t|
     t.string "name"
     t.boolean "is_active"
+    t.boolean "is_won"
     t.bigint "drawer_id"
     t.bigint "guesser_id"
     t.string "answer"
-    t.string "guesses", array: true
+    t.string "guesses", default: [], array: true
+    t.string "rejectList", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["drawer_id"], name: "index_games_on_drawer_id"

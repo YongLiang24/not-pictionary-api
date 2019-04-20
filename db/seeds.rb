@@ -12,7 +12,7 @@ game_three = Game.find_or_create_by(drawer: pizza, guesser: obinna, answer: 'Lov
 game_four = Game.find_or_create_by(drawer: roni, guesser: carrie, answer: 'Ace of Spades', guesses: [], name: 'Moira vs Town Council')
 game_four = Game.find_or_create_by(drawer: roni, guesser: carrie, answer: 'Ace of Spades', guesses: [], name: 'Moira vs Town Council')
 
-
+Canvas.create(prevXArray: [], prevYArray: [], currXArray: [], currYArray: [], currentGameId: 1)
 
 game_one.is_active = true
 game_one.save

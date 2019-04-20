@@ -7,7 +7,8 @@ class CreateGames < ActiveRecord::Migration[5.2]
       t.references :drawer
       t.references :guesser
       t.string :answer
-      t.string :guesses, array: true
+      t.string :guesses, array: true, default: []
+      t.string :rejectList, array: true, default: []
       t.timestamps
     end
   end
