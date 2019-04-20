@@ -5,5 +5,5 @@ Rails.application.routes.draw do
   resources :player
   resources :timer
   # mount the ActionCable server with a '/cable' endpoint-- will be used to instantiate websockets connection with the server
-  mount ActionCable.server => '/cable'
+  # mount ActionCable.server => '/cable'
 end
