@@ -7,8 +7,6 @@ class CanvasController < ApplicationController
   def create
     @canvas = Canvas.create(canvas_drawing_params)
     render json: @canvas
-    ActionCable.server.broadcast "canvas_drawings_channel_#{canvas_drawing_params[:currentGameId]}", canvas_drawing_params
-    head :ok
   end
 
   def show
